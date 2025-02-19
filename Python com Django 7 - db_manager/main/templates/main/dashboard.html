@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid black; text-align: left; }
+        button { padding: 5px 10px; background-color:green; color: white; border: none; }
+        .delete-btn { background-color: red; }
+        .edit-btn { background-color: blue; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gerenciador de Nomes</h2>
+        <form method="POST" action="{% url 'create_database' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Adicione um Nome" required>
+            <button type="submit">Adicionar Nome</button>
+        </form>
+        <h3>Seus Nomes</h3>
+        <table>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+            {% for db in databases %}
+            <tr>
+                <td>{{ db.name }}</td>
+                <td>
+                    <form method="POST" action="{% url 'delete_database' db.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">Excluir</button>
+                    </form>
+                    <form method="POST" action="{% url 'update_database' db.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="Novo Nome" required>
+                        <button type="submit" class="edit-btn">Editar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
